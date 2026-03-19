@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>🏆 Kicker Tournament</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════ HEADER -->
+  <header class="app-header">
+    <div class="header-inner">
+      <button class="btn-icon" id="btn-back" style="display:none" aria-label="Retour">
+        <span>&#8592;</span>
+      </button>
+      <h1 class="app-title" id="header-title">⚽ Kicker</h1>
+      <div class="header-spacer"></div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════ TOAST -->
+  <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
+
+  <!-- ═══════════════════════════════════════════════════════ VIEWS -->
+  <main class="app-main">
+
+    <!-- ──────────────────────── VIEW: HOME -->
+    <section id="view-home" class="view active">
+      <div class="hero">
+        <div class="hero-icon">⚽</div>
+        <h2>Tournoi Kicker</h2>
+        <p class="hero-sub">Créez ou rejoignez un tournoi</p>
+      </div>
+
+      <div class="card">
+        <h3>Nouveau tournoi</h3>
+        <div class="form-group">
+          <label for="new-tournament-name">Nom du tournoi</label>
+          <input type="text" id="new-tournament-name" placeholder="Ex: Tournoi du Vendredi" maxlength="50" />
+        </div>
+        <div class="form-group">
+          <label>Format</label>
+          <div class="radio-group">
+            <label class="radio-card">
+              <input type="radio" name="format" value="round-robin" checked />
+              <span class="radio-label">
+                <span class="radio-icon">🔄</span>
+                <strong>Round Robin</strong>
+                <small>Tout le monde joue contre tout le monde</small>
+              </span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="format" value="knockout" />
+              <span class="radio-label">
+                <span class="radio-icon">⚡</span>
+                <strong>Élimination</strong>
+                <small>Bracket à élimination directe</small>
+              </span>
+            </label>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-full" id="btn-create-tournament">
+          Créer le tournoi
+        </button>
+      </div>
+
+      <div class="card">
+        <h3>Données de démo</h3>
+        <p class="text-muted">Créer un tournoi de démo avec 8 joueurs</p>
+        <div class="demo-buttons">
+          <button class="btn btn-outline btn-full" id="btn-seed-rr">
+            ⚽ Démo Round Robin
+          </button>
+          <button class="btn btn-outline btn-full" id="btn-seed-ko">
+            ⚡ Démo Élimination
+          </button>
+        </div>
+      </div>
+
+      <div class="card" id="card-tournaments">
+        <div class="card-header-row">
+          <h3>Tournois existants</h3>
+          <button class="btn-link" id="btn-refresh-list">↻ Actualiser</button>
+        </div>
+        <div id="tournament-list">
+          <p class="text-muted text-center">Chargement...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ──────────────────────── VIEW: SETUP -->
+    <section id="view-setup" class="view">
+      <div class="card">
+        <div class="tournament-info" id="setup-tournament-info">
+          <!-- filled by JS -->
+        </div>
+      </div>
+
+      <div class="card" id="card-add-player">
+        <h3>Ajouter un joueur</h3>
+        <div class="input-row">
+          <input type="text" id="new-player-name" placeholder="Nom du joueur" maxlength="30" />
+          <button class="btn btn-primary" id="btn-add-player">Ajouter</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header-row">
+          <h3>Joueurs <span id="player-count-badge" class="badge">0</span></h3>
+        </div>
+        <ul id="player-list" class="player-list">
+          <!-- filled by JS -->
+        </ul>
+        <p id="no-players-msg" class="text-muted text-center">Aucun joueur ajouté</p>
+      </div>
+
+      <div class="card" id="card-generate">
+        <button class="btn btn-success btn-full" id="btn-generate">
+          ⚡ Générer les matchs
+        </button>
+        <p class="text-muted text-center" style="margin-top:8px;font-size:0.8rem">
+          Minimum 2 joueurs requis
+        </p>
+      </div>
+    </section>
+
+    <!-- ──────────────────────── VIEW: TOURNAMENT (tabs) -->
+    <section id="view-tournament" class="view">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="matches">Matchs</button>
+        <button class="tab-btn" data-tab="standings">Classement</button>
+        <button class="tab-btn" id="tab-bracket-btn" data-tab="bracket" style="display:none">Bracket</button>
+      </div>
+
+      <!-- Tab: Matches -->
+      <div id="tab-matches" class="tab-content active">
+        <div id="rounds-container">
+          <!-- filled by JS -->
+        </div>
+      </div>
+
+      <!-- Tab: Standings -->
+      <div id="tab-standings" class="tab-content">
+        <div class="card">
+          <div id="standings-table-wrapper">
+            <p class="text-muted text-center">Chargement...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Bracket -->
+      <div id="tab-bracket" class="tab-content">
+        <div class="card">
+          <div id="bracket-container">
+            <!-- filled by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════ SCORE MODAL -->
+  <div id="score-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Saisir le score" style="display:none">
+    <div class="modal">
+      <h2 class="modal-title">⚽ Saisir le score</h2>
+      <div id="modal-match-info" class="modal-match-info"></div>
+
+      <div class="score-inputs">
+        <div class="score-player">
+          <div class="score-player-name" id="modal-p1-name"></div>
+          <div class="score-stepper">
+            <button class="stepper-btn" data-target="score1" data-delta="-1">−</button>
+            <input type="number" id="score1" class="score-input" value="0" min="0" max="99" />
+            <button class="stepper-btn" data-target="score1" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="score-vs">VS</div>
+        <div class="score-player">
+          <div class="score-player-name" id="modal-p2-name"></div>
+          <div class="score-stepper">
+            <button class="stepper-btn" data-target="score2" data-delta="-1">−</button>
+            <input type="number" id="score2" class="score-input" value="0" min="0" max="99" />
+            <button class="stepper-btn" data-target="score2" data-delta="1">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-outline" id="btn-cancel-score">Annuler</button>
+        <button class="btn btn-success" id="btn-save-score">✓ Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
