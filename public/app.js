@@ -5,7 +5,9 @@
 (function () {
   'use strict';
 
-  const API = '/api';
+  // Detect base path from current URL (works behind reverse proxy with path prefix)
+  const basePath = window.location.pathname.replace(/\/+$/, '').replace(/\/[^/]*\.[^/]*$/, '') || '';
+  const API = basePath + '/api';
   let currentTournament = null;
   let pollInterval = null;
 
